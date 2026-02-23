@@ -153,6 +153,39 @@ const Storage = {
     return byCategory;
   },
 
+  async getWeeklyComparison() {
+    const purchases = await this.getPurchases();
+    const now = new Date();
+    const weeks = [];
+
+    for (let i = 0; i < 4; i++) {
+      const weekEnd = new Date(now);
+      weekEnd.setDate(now.getDate() - i * 7);
+      weekEnd.setHours(23, 59, 59, 999);
+
+      const weekStart = new Date(weekEnd);
+      weekStart.setDate(weekEnd.getDate() - 6);
+      weekStart.setHours(0, 0, 0, 0);
+
+      const weekPurchases = purchases.filter((p) => {
+        const d = new Date(p.date);
+        return d >= weekStart && d <= weekEnd;
+      });
+
+      const total = weekPurchases.reduce((sum, p) => sum + (p.amount || 0), 0);
+
+      weeks.push({
+        label: weekStart.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) +
+          " - " +
+          weekEnd.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }),
+        total: Math.round(total * 100) / 100,
+        count: weekPurchases.length,
+      });
+    }
+
+    return weeks.reverse();
+  },
+
   async exportData() {
     const purchases = await this.getPurchases();
     const settings = await this.getSettings();
