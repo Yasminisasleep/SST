@@ -9,6 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   allPurchases = await Storage.getPurchases();
   await populateFilters();
   applyFilters();
+  await renderWeeklyTrend();
   setupEventListeners();
 });
 
@@ -211,4 +212,31 @@ function escapeHtml(text) {
   const div = document.createElement("div");
   div.textContent = text;
   return div.innerHTML;
+}
+
+async function renderWeeklyTrend() {
+  const weeks = await Storage.getWeeklyComparison();
+  const container = document.getElementById("weekly-chart");
+  container.innerHTML = "";
+
+  if (weeks.length === 0) {
+    container.innerHTML = '<p class="empty-state">No weekly data yet.</p>';
+    return;
+  }
+
+  const maxTotal = Math.max(...weeks.map((w) => w.total), 1);
+
+  weeks.forEach((week, i) => {
+    const heightPct = (week.total / maxTotal) * 100;
+    const isCurrent = i === weeks.length - 1;
+
+    const group = document.createElement("div");
+    group.className = "weekly-bar-group";
+    group.innerHTML =
+      '<span class="weekly-bar-amount">€' + week.total.toFixed(0) + "</span>" +
+      '<div class="weekly-bar' + (isCurrent ? " current" : "") + '" style="height:' + Math.max(heightPct, 3) + '%"></div>' +
+      '<span class="weekly-bar-label">' + week.label + "</span>";
+
+    container.appendChild(group);
+  });
 }
