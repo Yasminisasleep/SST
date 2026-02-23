@@ -9,10 +9,14 @@ chrome.runtime.onInstalled.addListener(async (details) => {
 });
 
 chrome.alarms.create("budget-check", { periodInMinutes: 60 });
+chrome.alarms.create("daily-summary", { periodInMinutes: 1440 });
 
 chrome.alarms.onAlarm.addListener(async (alarm) => {
   if (alarm.name === "budget-check") {
     await checkBudgetStatus();
+  }
+  if (alarm.name === "daily-summary") {
+    await sendDailySummary();
   }
 });
 
@@ -90,6 +94,7 @@ async function handlePurchaseDetected(data, sendResponse) {
   const purchase = await Storage.addPurchase(data);
   sendResponse({ saved: true, purchase });
 
+  notifyPurchaseLogged(purchase);
   await checkBudgetStatus();
 }
 
@@ -142,9 +147,9 @@ async function checkBudgetStatus() {
       iconUrl: "icons/icon128.png",
       title: "Budget Exceeded!",
       message:
-        "You've spent $" +
+        "You've spent €" +
         status.spent.toFixed(2) +
-        " of your $" +
+        " of your €" +
         status.budget.toFixed(2) +
         " " +
         status.period +
@@ -161,10 +166,51 @@ async function checkBudgetStatus() {
         status.percentage +
         "% of your " +
         status.period +
-        " budget. $" +
+        " budget. €" +
         status.remaining.toFixed(2) +
         " remaining.",
       priority: 1,
     });
   }
+}
+
+function notifyPurchaseLogged(purchase) {
+  chrome.notifications.create("purchase-" + purchase.id, {
+    type: "basic",
+    iconUrl: "icons/icon128.png",
+    title: "Purchase Tracked",
+    message:
+      purchase.description.substring(0, 60) +
+      " — €" +
+      purchase.amount.toFixed(2) +
+      " on " +
+      (purchase.platform || "Unknown"),
+    priority: 0,
+  });
+}
+
+async function sendDailySummary() {
+  const settings = await Storage.getSettings();
+  if (!settings.notificationsEnabled) return;
+
+  const purchases = await Storage.getPurchases();
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  const todayPurchases = purchases.filter((p) => new Date(p.date) >= today);
+  if (todayPurchases.length === 0) return;
+
+  const dayTotal = todayPurchases.reduce((sum, p) => sum + (p.amount || 0), 0);
+
+  chrome.notifications.create("daily-summary", {
+    type: "basic",
+    iconUrl: "icons/icon128.png",
+    title: "Daily Spending Summary",
+    message:
+      "Today: " +
+      todayPurchases.length +
+      " purchase(s) for €" +
+      dayTotal.toFixed(2),
+    priority: 0,
+  });
 }
