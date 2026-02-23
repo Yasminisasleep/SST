@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>History - Smart Spending Tracker</title>
+  <link rel="stylesheet" href="history.css">
+</head>
+<body>
+  <div class="history-container">
+    <header class="history-header">
+      <div>
+        <h1>Purchase History</h1>
+        <p class="subtitle" id="summary-text">Loading...</p>
+      </div>
+    </header>
+
+    <div class="controls">
+      <div class="filter-group">
+        <select id="filter-period">
+          <option value="all">All Time</option>
+          <option value="weekly">This Week</option>
+          <option value="monthly" selected>This Month</option>
+          <option value="yearly">This Year</option>
+        </select>
+        <select id="filter-category">
+          <option value="all">All Categories</option>
+        </select>
+        <select id="filter-platform">
+          <option value="all">All Platforms</option>
+        </select>
+      </div>
+      <div class="search-group">
+        <input type="text" id="search-input" placeholder="Search purchases...">
+      </div>
+    </div>
+
+    <div class="spending-summary">
+      <div class="summary-card">
+        <span class="summary-label">Total Spent</span>
+        <span class="summary-value" id="total-spent">€0.00</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Purchases</span>
+        <span class="summary-value" id="total-count">0</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Average</span>
+        <span class="summary-value" id="avg-amount">€0.00</span>
+      </div>
+      <div class="summary-card">
+        <span class="summary-label">Top Category</span>
+        <span class="summary-value" id="top-category">-</span>
+      </div>
+    </div>
+
+    <div class="chart-section">
+      <h2>Spending by Category</h2>
+      <div id="chart-container" class="chart-container"></div>
+    </div>
+
+    <div class="purchases-table-wrapper">
+      <table class="purchases-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Description</th>
+            <th>Platform</th>
+            <th>Category</th>
+            <th>Amount</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody id="purchases-body"></tbody>
+      </table>
+      <p id="no-results" class="empty-state">No purchases found.</p>
+    </div>
+  </div>
+
+  <script src="../lib/storage.js"></script>
+  <script src="history.js"></script>
+</body>
+</html>
