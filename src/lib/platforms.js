@@ -34,7 +34,7 @@ const Platforms = {
 
   ebay: {
     name: "eBay",
-    hostPattern: /ebay\.com/,
+    hostPattern: /ebay\.(com|fr)/,
     orderPagePatterns: [
       /\/ord\/show/,
       /\/chk\/confirm/,
@@ -246,6 +246,102 @@ const Platforms = {
       ],
     },
     defaultCategory: "Electronics",
+  },
+
+  vinted: {
+    name: "Vinted",
+    hostPattern: /vinted\.(fr|com|be|es|it|de|nl|pt|pl|lt|cz|sk|hu|ro|lu|at|se|dk|fi)/,
+    orderPagePatterns: [
+      /\/transaction/i,
+      /\/checkout/i,
+      /\/order/i,
+      /\/pay/i,
+    ],
+    selectors: {
+      orderTotal: [
+        '[data-testid="total-price"]',
+        ".checkout-summary-total",
+        ".transaction-total",
+        ".price-total",
+      ],
+      itemName: [
+        '[data-testid="item-title"]',
+        ".item-box__title",
+        ".checkout-item-title",
+        ".web_ui__Text__subtitle",
+      ],
+      confirmationIndicators: [
+        '[data-testid="order-confirmation"]',
+        ".transaction-success",
+        ".purchase-confirmation",
+      ],
+    },
+    defaultCategory: "Clothing",
+  },
+
+  vestiaire: {
+    name: "Vestiaire Collective",
+    hostPattern: /vestiairecollective\.(com|fr)/,
+    orderPagePatterns: [
+      /\/order/i,
+      /\/checkout/i,
+      /\/payment/i,
+      /\/confirmation/i,
+    ],
+    selectors: {
+      orderTotal: [
+        ".order-total",
+        ".total-price",
+        ".checkout-total",
+        '[data-test="total-amount"]',
+      ],
+      itemName: [
+        ".product-name",
+        ".product-title",
+        ".checkout-product-title",
+        '[data-test="product-name"]',
+      ],
+      confirmationIndicators: [
+        ".order-confirmation",
+        ".confirmation-page",
+        '[data-test="confirmation"]',
+      ],
+    },
+    defaultCategory: "Clothing",
+  },
+
+  paypal: {
+    name: "PayPal",
+    hostPattern: /paypal\.(com|fr)/,
+    orderPagePatterns: [
+      /\/myaccount\/transfer\/buy/i,
+      /\/checkoutnow/i,
+      /\/webapps\/hermes/i,
+      /\/activity\/payment/i,
+      /\/receipt/i,
+    ],
+    selectors: {
+      orderTotal: [
+        ".transactionAmount",
+        ".payment-amount",
+        "[data-testid=\"payment-amount\"]",
+        ".totalAmount",
+        ".cartTotal",
+      ],
+      itemName: [
+        ".merchantName",
+        ".payment-recipient",
+        "[data-testid=\"merchant-name\"]",
+        ".transactionDescription",
+      ],
+      confirmationIndicators: [
+        ".payment-confirmation",
+        ".receipt-page",
+        "[data-testid=\"confirmation\"]",
+        ".thankyou",
+      ],
+    },
+    defaultCategory: "Other",
   },
 
   detectPlatform(url) {

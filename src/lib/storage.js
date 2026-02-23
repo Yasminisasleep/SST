@@ -11,7 +11,7 @@ const Storage = {
     budgetPeriod: "monthly",
     alertThreshold: 80,
     notificationsEnabled: true,
-    currency: "USD",
+    currency: "EUR",
     trackingEnabled: true,
   },
 

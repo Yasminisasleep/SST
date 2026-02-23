@@ -1,4 +1,4 @@
-importScripts("storage.js", "platforms.js");
+importScripts("../lib/storage.js", "../lib/platforms.js");
 
 chrome.runtime.onInstalled.addListener(async (details) => {
   if (details.reason === "install") {

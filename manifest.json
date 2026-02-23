@@ -11,39 +11,55 @@
   ],
   "host_permissions": [
     "*://*.amazon.com/*",
+    "*://*.amazon.fr/*",
     "*://*.amazon.co.uk/*",
     "*://*.ebay.com/*",
+    "*://*.ebay.fr/*",
     "*://*.walmart.com/*",
     "*://*.target.com/*",
     "*://*.bestbuy.com/*",
     "*://*.etsy.com/*",
     "*://*.shopify.com/*",
     "*://*.aliexpress.com/*",
-    "*://*.newegg.com/*"
+    "*://*.newegg.com/*",
+    "*://*.vinted.fr/*",
+    "*://*.vinted.com/*",
+    "*://*.vestiairecollective.com/*",
+    "*://*.vestiairecollective.fr/*",
+    "*://*.paypal.com/*",
+    "*://*.paypal.fr/*"
   ],
   "background": {
-    "service_worker": "background.js"
+    "service_worker": "src/background/background.js"
   },
   "content_scripts": [
     {
       "matches": [
         "*://*.amazon.com/*",
+        "*://*.amazon.fr/*",
         "*://*.amazon.co.uk/*",
         "*://*.ebay.com/*",
+        "*://*.ebay.fr/*",
         "*://*.walmart.com/*",
         "*://*.target.com/*",
         "*://*.bestbuy.com/*",
         "*://*.etsy.com/*",
         "*://*.shopify.com/*",
         "*://*.aliexpress.com/*",
-        "*://*.newegg.com/*"
+        "*://*.newegg.com/*",
+        "*://*.vinted.fr/*",
+        "*://*.vinted.com/*",
+        "*://*.vestiairecollective.com/*",
+        "*://*.vestiairecollective.fr/*",
+        "*://*.paypal.com/*",
+        "*://*.paypal.fr/*"
       ],
-      "js": ["content.js"],
+      "js": ["src/content/content.js"],
       "run_at": "document_idle"
     }
   ],
   "action": {
-    "default_popup": "popup/popup.html",
+    "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
