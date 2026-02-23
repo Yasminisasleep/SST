@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Spending Tracker</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <header class="popup-header">
+      <h1>Smart Spending Tracker</h1>
+      <div class="header-actions">
+        <button id="btn-history" class="icon-btn" title="Purchase History">&#128203;</button>
+        <button id="btn-settings" class="icon-btn" title="Settings">&#9881;</button>
+      </div>
+    </header>
+
+    <section class="budget-overview">
+      <div class="budget-ring-container">
+        <svg class="budget-ring" viewBox="0 0 120 120">
+          <circle class="ring-bg" cx="60" cy="60" r="52" />
+          <circle class="ring-fill" id="ring-fill" cx="60" cy="60" r="52" />
+        </svg>
+        <div class="ring-label">
+          <span class="ring-percent" id="budget-percent">0%</span>
+          <span class="ring-sub">of budget</span>
+        </div>
+      </div>
+      <div class="budget-details">
+        <div class="budget-row">
+          <span class="label">Spent</span>
+          <span class="value" id="spent-amount">$0.00</span>
+        </div>
+        <div class="budget-row">
+          <span class="label">Remaining</span>
+          <span class="value" id="remaining-amount">$0.00</span>
+        </div>
+        <div class="budget-row">
+          <span class="label">Budget</span>
+          <span class="value" id="budget-amount">$0.00</span>
+        </div>
+        <div class="budget-row">
+          <span class="label">Period</span>
+          <span class="value" id="budget-period">Monthly</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="recent-purchases">
+      <h2>Recent Purchases</h2>
+      <div id="recent-list" class="purchase-list"></div>
+      <p id="no-purchases" class="empty-state">No purchases tracked yet.</p>
+    </section>
+
+    <section class="quick-add">
+      <h2>Add Purchase</h2>
+      <form id="quick-add-form">
+        <div class="form-row">
+          <input type="text" id="add-description" placeholder="Description" required>
+          <input type="number" id="add-amount" placeholder="0.00" step="0.01" min="0.01" required>
+        </div>
+        <div class="form-row">
+          <select id="add-category"></select>
+          <button type="submit" class="btn-primary">Add</button>
+        </div>
+      </form>
+    </section>
+
+    <footer class="popup-footer">
+      <span class="tracking-status" id="tracking-status">Tracking Active</span>
+    </footer>
+  </div>
+
+  <script src="../storage.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>
