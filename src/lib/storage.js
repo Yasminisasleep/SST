@@ -48,13 +48,30 @@ const Storage = {
   },
 
   async addPurchase(purchase) {
+    if (!purchase || typeof purchase !== "object") return null;
+
+    const amount = parseFloat(purchase.amount);
+    if (isNaN(amount) || amount <= 0 || amount > 999999) return null;
+
+    const sanitized = {
+      amount: Math.round(amount * 100) / 100,
+      description: String(purchase.description || "").substring(0, 200).trim(),
+      category: String(purchase.category || "Other").substring(0, 50),
+      platform: String(purchase.platform || "Manual").substring(0, 50),
+      currency: String(purchase.currency || "EUR").substring(0, 3),
+      url: String(purchase.url || "").substring(0, 500),
+      pageTitle: String(purchase.pageTitle || "").substring(0, 200),
+      id: Date.now().toString(36) + Math.random().toString(36).slice(2, 7),
+      timestamp: Date.now(),
+      date: new Date().toISOString(),
+    };
+
+    if (!sanitized.description) sanitized.description = "Unnamed purchase";
+
     const purchases = await this.getPurchases();
-    purchase.id = Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-    purchase.timestamp = Date.now();
-    purchase.date = new Date().toISOString();
-    purchases.unshift(purchase);
+    purchases.unshift(sanitized);
     await this.set(this.KEYS.PURCHASES, purchases);
-    return purchase;
+    return sanitized;
   },
 
   async deletePurchase(id) {
@@ -70,7 +87,20 @@ const Storage = {
   },
 
   async saveSettings(settings) {
-    await this.set(this.KEYS.SETTINGS, settings);
+    if (!settings || typeof settings !== "object") return;
+
+    const validated = {
+      budgetAmount: Math.max(0, Math.min(parseFloat(settings.budgetAmount) || 500, 9999999)),
+      budgetPeriod: ["weekly", "monthly", "yearly"].includes(settings.budgetPeriod)
+        ? settings.budgetPeriod
+        : "monthly",
+      alertThreshold: Math.max(50, Math.min(parseInt(settings.alertThreshold, 10) || 80, 100)),
+      notificationsEnabled: Boolean(settings.notificationsEnabled),
+      currency: String(settings.currency || "EUR").substring(0, 3),
+      trackingEnabled: Boolean(settings.trackingEnabled),
+    };
+
+    await this.set(this.KEYS.SETTINGS, validated);
   },
 
   async getCategories() {
@@ -130,11 +160,16 @@ const Storage = {
   },
 
   async importData(data) {
-    if (data.purchases) {
-      await this.set(this.KEYS.PURCHASES, data.purchases);
+    if (!data || typeof data !== "object") return;
+
+    if (Array.isArray(data.purchases)) {
+      const valid = data.purchases.filter(
+        (p) => p && typeof p.amount === "number" && p.amount > 0 && p.date
+      );
+      await this.set(this.KEYS.PURCHASES, valid);
     }
-    if (data.settings) {
-      await this.set(this.KEYS.SETTINGS, data.settings);
+    if (data.settings && typeof data.settings === "object") {
+      await this.saveSettings(data.settings);
     }
   },
 
