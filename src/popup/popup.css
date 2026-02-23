@@ -232,6 +232,7 @@ body {
   display: flex;
   gap: 8px;
   margin-bottom: 8px;
+  align-items: stretch;
 }
 
 .form-row:last-child {
@@ -242,6 +243,7 @@ input[type="text"],
 input[type="number"],
 select {
   flex: 1;
+  min-width: 0;
   padding: 8px 10px;
   background: #0f0f1a;
   border: 1px solid #2a2a3d;
@@ -250,6 +252,7 @@ select {
   font-size: 12px;
   outline: none;
   transition: border-color 0.2s;
+  height: 34px;
 }
 
 input:focus,
@@ -271,7 +274,8 @@ select option {
 }
 
 .btn-primary {
-  padding: 8px 18px;
+  padding: 0 18px;
+  height: 34px;
   background: #6c5ce7;
   color: #ffffff;
   border: none;
@@ -281,6 +285,7 @@ select option {
   cursor: pointer;
   transition: background 0.2s;
   white-space: nowrap;
+  flex-shrink: 0;
 }
 
 .btn-primary:hover {
