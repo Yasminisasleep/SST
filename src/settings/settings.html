@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Settings - Smart Spending Tracker</title>
+  <link rel="stylesheet" href="settings.css">
+</head>
+<body>
+  <div class="settings-container">
+    <header class="settings-header">
+      <h1>Settings</h1>
+      <p class="subtitle">Configure your spending tracker</p>
+    </header>
+
+    <section class="settings-section">
+      <h2>Budget</h2>
+      <div class="setting-group">
+        <label for="budget-amount">Budget Amount (€)</label>
+        <input type="number" id="budget-amount" min="0" step="1" placeholder="500">
+      </div>
+      <div class="setting-group">
+        <label for="budget-period">Budget Period</label>
+        <select id="budget-period">
+          <option value="weekly">Weekly</option>
+          <option value="monthly" selected>Monthly</option>
+          <option value="yearly">Yearly</option>
+        </select>
+      </div>
+      <div class="setting-group">
+        <label for="alert-threshold">Alert Threshold (%)</label>
+        <div class="range-wrapper">
+          <input type="range" id="alert-threshold" min="50" max="100" value="80">
+          <span id="threshold-value">80%</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Notifications</h2>
+      <div class="setting-group toggle-group">
+        <label for="notifications-enabled">Budget Alerts</label>
+        <label class="toggle">
+          <input type="checkbox" id="notifications-enabled" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="setting-group toggle-group">
+        <label for="tracking-enabled">Auto-Tracking</label>
+        <label class="toggle">
+          <input type="checkbox" id="tracking-enabled" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Categories</h2>
+      <div id="categories-list" class="categories-list"></div>
+      <div class="add-category-row">
+        <input type="text" id="new-category" placeholder="New category name">
+        <button id="btn-add-category" class="btn-secondary">Add</button>
+      </div>
+    </section>
+
+    <section class="settings-section">
+      <h2>Data</h2>
+      <div class="data-actions">
+        <button id="btn-export" class="btn-secondary">Export Data</button>
+        <button id="btn-import" class="btn-secondary">Import Data</button>
+        <button id="btn-clear" class="btn-danger">Clear All Data</button>
+      </div>
+      <input type="file" id="import-file" accept=".json" hidden>
+    </section>
+
+    <div class="settings-footer">
+      <button id="btn-save" class="btn-primary">Save Settings</button>
+      <span id="save-status" class="save-status"></span>
+    </div>
+  </div>
+
+  <script src="../lib/storage.js"></script>
+  <script src="settings.js"></script>
+</body>
+</html>
